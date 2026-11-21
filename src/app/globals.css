@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ───────────────────────── Design tokens ───────────────────────── */
+@theme {
+  /* On repart d'une palette vierge : uniquement les couleurs de la marque. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-ink: #040405;
+  --color-brand: #00e834;
+
+  /* Verts */
+  --color-green-50: #e6fdeb;
+  --color-green-100: #b0f8c0;
+  --color-green-200: #8af4a2;
+  --color-green-300: #54f077;
+  --color-green-400: #33ed5d;
+  --color-green-500: #00e834;
+  --color-green-600: #00d32f;
+  --color-green-700: #00a525;
+  --color-green-800: #00801d;
+  --color-green-900: #006116;
+  --color-green-950: #00300a;
+
+  /* Gris */
+  --color-gray-100: #eef0f4;
+  --color-gray-300: #c1c5d0;
+  --color-gray-400: #a3a8b7;
+  --color-gray-500: #868ca0;
+  --color-gray-600: #58617b;
+  --color-gray-700: #464e62;
+  --color-gray-800: #353a4a;
+  --color-gray-900: #232731;
+  --color-gray-950: #1a1a1a;
+
+  /* Fonctionnelles */
+  --color-info: #246bfd;
+  --color-success: #02c02b;
+  --color-warning: #ff981f;
+  --color-error: #f75555;
+
+  /* Animations */
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-intro: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ───────────────────────── Utilitaires maison ───────────────────────── */
+@utility container-page {
+  margin-inline: auto;
+  max-width: 1240px;
+  padding-inline: 20px;
+}
+
+@utility eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-green-800);
+}
+
+@utility heading-2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 4.6vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+@utility section-py {
+  padding-block: clamp(64px, 9vw, 112px);
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: var(--color-green-800);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--color-green-700);
+    text-decoration: underline;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+/* ───────────────────────── Animations ───────────────────────── */
+
+/* Reveal au scroll : actif uniquement quand le JS tourne (classe .js posée dans <head>). */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s var(--ease-out-soft) calc(var(--reveal-i, 0) * 90ms),
+    transform 0.9s var(--ease-out-soft) calc(var(--reveal-i, 0) * 90ms);
+}
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal="1"] { --reveal-i: 1; }
+[data-reveal="2"] { --reveal-i: 2; }
+[data-reveal="3"] { --reveal-i: 3; }
+[data-reveal="4"] { --reveal-i: 4; }
+[data-reveal="5"] { --reveal-i: 5; }
+[data-reveal="6"] { --reveal-i: 6; }
+
+/* Intro du hero */
+@keyframes intro-panel {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes intro-up {
+  from { opacity: 0; transform: translateY(80px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes intro-left {
+  from { opacity: 0; transform: translate(-60px, 40px) rotate(-6deg); }
+  to { opacity: 1; transform: translate(0, 0) rotate(0); }
+}
+[data-intro="panel"] { animation: intro-panel 1100ms var(--ease-intro) 100ms backwards; }
+[data-intro="up"] { animation: intro-up 1100ms var(--ease-intro) 350ms backwards; }
+[data-intro="left"] { animation: intro-left 1100ms var(--ease-intro) 750ms backwards; }
+
+/* Flottement : durée 4.2s + i × 0.9s, délai i × 0.4s */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--float-y, -10px)); }
+}
+[data-float] {
+  animation: float var(--float-d, 4.2s) ease-in-out var(--float-delay, 0s) infinite;
+}
+[data-float="1"] { --float-d: 5.1s; --float-delay: 0.4s; }
+[data-float="2"] { --float-d: 6s; --float-delay: 0.8s; --float-y: -14px; }
+[data-float="3"] { --float-d: 6.9s; --float-delay: 1.2s; }
+[data-float="4"] { --float-d: 7.8s; --float-delay: 1.6s; }
+[data-float="5"] { --float-d: 8.7s; --float-delay: 2s; }
+
+/* Halo */
+@keyframes glow {
+  0%, 100% { transform: scale(0.92); opacity: 0.7; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+[data-glow] {
+  animation: glow 6s ease-in-out infinite;
+}
+
+/* ───────────────────────── Accessibilité : mouvement réduit ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
