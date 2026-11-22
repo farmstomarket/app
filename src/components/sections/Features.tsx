@@ -3,11 +3,13 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-import { FEATURES } from "@/lib/content";
+import { FEATURE_IMAGES } from "@/lib/content";
+import type { Dictionary } from "@/i18n/fr";
 
 const num = (i: number) => String(i + 1).padStart(2, "0");
 
-export function Features() {
+export function Features({ dict }: { dict: Dictionary["features"] }) {
+  const items = dict.items;
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -31,17 +33,15 @@ export function Features() {
     <section className="bg-white">
       <div className="container-page pt-[clamp(64px,9vw,112px)]">
         <div data-reveal="0" className="flex max-w-[680px] flex-col gap-3.5">
-          <span className="eyebrow">Ce qui change pour vous</span>
-          <h2 className="heading-2 text-balance">
-            Plus de revenus, moins de pertes, zéro zone grise.
-          </h2>
+          <span className="eyebrow">{dict.eyebrow}</span>
+          <h2 className="heading-2 text-balance">{dict.heading}</h2>
         </div>
       </div>
 
       {/* Desktop (≥ 900px) : scrollytelling avec visuel sticky */}
       <div className="container-page hidden grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-16 pb-[clamp(64px,8vw,96px)] min-[900px]:grid">
         <div ref={listRef} className="flex flex-col">
-          {FEATURES.map((f, i) => (
+          {items.map((f, i) => (
             <div
               key={f.title}
               data-feat={i}
@@ -62,10 +62,10 @@ export function Features() {
         </div>
         <div className="relative">
           <div className="sticky top-24 h-[calc(100vh-140px)] max-h-[720px] overflow-hidden rounded-[32px] bg-gray-100">
-            {FEATURES.map((f, i) => (
+            {items.map((f, i) => (
               <Image
                 key={f.title}
-                src={f.img}
+                src={FEATURE_IMAGES[i]}
                 alt={f.title}
                 aria-hidden={i !== active}
                 sizes="(min-width: 1240px) 620px, 50vw"
@@ -82,7 +82,7 @@ export function Features() {
               />
             ))}
             <div className="absolute bottom-6 left-6 flex gap-1.5" aria-hidden>
-              {FEATURES.map((f, i) => (
+              {items.map((f, i) => (
                 <span
                   key={f.title}
                   className="h-1.5 rounded-[3px] transition-[width,background-color] duration-400 ease-in-out"
@@ -99,11 +99,11 @@ export function Features() {
 
       {/* Mobile (< 900px) : liste image + texte */}
       <div className="container-page flex flex-col gap-14 pt-10 pb-[72px] min-[900px]:hidden">
-        {FEATURES.map((f, i) => (
+        {items.map((f, i) => (
           <div key={f.title} data-reveal="0" className="flex flex-col gap-3.5">
             <div className="aspect-[4/3] overflow-hidden rounded-3xl bg-gray-100">
               <Image
-                src={f.img}
+                src={FEATURE_IMAGES[i]}
                 alt={f.title}
                 sizes="100vw"
                 className="size-full object-contain"

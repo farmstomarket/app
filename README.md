@@ -7,7 +7,7 @@ Stack : **Next.js 16** (App Router, React 19, TypeScript) + **Tailwind CSS 4**.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev      # http://localhost:3000 (redirige vers /en ou /fr)
 npm run build && npm start
 ```
 
@@ -15,25 +15,36 @@ npm run build && npm start
 
 ```
 src/
+├── proxy.ts              # Détection de langue (ex-middleware) : / → /en ou /fr selon Accept-Language
 ├── app/
-│   ├── layout.tsx        # Polices (Plus Jakarta Sans, Urbanist), métadonnées SEO, lang="fr"
-│   ├── page.tsx          # Sections + JSON-LD (MobileApplication, FAQPage, Organization, WebSite)
+│   ├── [locale]/
+│   │   ├── layout.tsx    # Layout racine : html lang dynamique, polices, generateStaticParams, SEO par locale
+│   │   ├── page.tsx      # Sections + JSON-LD (MobileApplication, FAQPage, Organization, WebSite)
+│   │   └── opengraph-image.png / twitter-image.png   # Aperçu de partage 1200×630
 │   ├── globals.css       # Design tokens (@theme), utilitaires, animations, reduced-motion
 │   ├── app/route.ts      # Smart link /app (redirection selon l'OS)
 │   ├── robots.ts         # robots.txt (Disallow /app, déclare le sitemap)
-│   ├── sitemap.ts        # sitemap.xml
+│   ├── sitemap.ts        # sitemap.xml (/en, /fr + alternates hreflang)
 │   ├── manifest.ts       # Web App Manifest (PWA)
 │   ├── icon.png          # Favicon 512×512 (pictogramme du logo)
-│   ├── apple-icon.png    # 180×180
-│   └── opengraph-image.png / twitter-image.png   # Aperçu de partage 1200×630
+│   └── apple-icon.png    # 180×180
+├── i18n/                 # 🌍 config (locales, défaut EN), dictionnaires fr.ts / en.ts, getDictionary()
 ├── assets/               # Logo + mockups (optimisés automatiquement par next/image)
 ├── config/site.ts        # ⚙️ Drapeaux showPro / showProof / showQR, liens stores, contacts, légal
-├── lib/content.ts        # 📝 Tous les textes : bénéfices, profils, FAQ, avis, carrousel
+├── lib/content.ts        # 🖼️ Images par section (indépendantes de la langue)
 └── components/
     ├── motion/RevealObserver.tsx   # Apparition au scroll ([data-reveal])
     ├── ui/                         # Logo, StoreButton (boutons texte), QrCode
     └── sections/                   # Header, Hero, Marquee, Stat, Features, Roles, Pro, Proof, Faq, FinalCta, Footer
 ```
+
+## Internationalisation (EN / FR)
+
+- **Anglais par défaut**, détection automatique de la langue du navigateur (`Accept-Language`) via `src/proxy.ts`.
+- Routes préfixées **`/en`** et **`/fr`** (`app/[locale]`), `generateStaticParams` prérend les deux.
+- Tous les textes sont dans **`src/i18n/fr.ts`** (source de vérité du type) et **`src/i18n/en.ts`**.
+  La locale courante est lue sans prop-drilling via **`next/root-params`** (`getDictionary()`).
+- SEO par locale : `title`/`description` traduits, `canonical` + `hreflang` (en, fr, x-default), `og:locale`.
 
 ## Déploiement
 
@@ -88,6 +99,6 @@ Tous les liens sont dans `src/config/site.ts` :
 ## À faire avant la mise en production
 
 - [ ] **Liens App Store** quand les apps iOS seront publiées (cf. ci-dessus).
-- [ ] **Avis** : chiffres et témoignages fictifs à remplacer (`src/lib/content.ts`) ou `showProof: false`.
+- [ ] **Avis** : chiffres et témoignages fictifs à remplacer (`src/i18n/fr.ts` + `src/i18n/en.ts`) ou `showProof: false`.
 - [ ] **Pages légales** (mentions, confidentialité, CGU) et leurs liens (`siteConfig.legal`).
 - [ ] **Logo SVG** à la place du PNG recadré.

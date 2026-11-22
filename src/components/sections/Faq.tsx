@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 
-import { FAQ } from "@/lib/content";
+import type { Dictionary } from "@/i18n/fr";
 
-export function Faq() {
+export function Faq({ dict }: { dict: Dictionary["faq"] }) {
   const [open, setOpen] = useState(0);
 
   return (
     <section className="bg-gray-100">
       <div className="container-page section-py grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-start gap-x-[72px] gap-y-10">
         <div data-reveal="0" className="flex flex-col gap-3.5">
-          <span className="eyebrow">Questions fréquentes</span>
-          <h2 className="heading-2">Avant de vous lancer.</h2>
+          <span className="eyebrow">{dict.eyebrow}</span>
+          <h2 className="heading-2">{dict.heading}</h2>
         </div>
 
         <div data-reveal="1" className="flex flex-col gap-2.5">
-          {FAQ.map((f, i) => {
+          {dict.items.map((f, i) => {
             const isOpen = open === i;
             return (
               <div key={f.q} className="overflow-hidden rounded-[18px] bg-white">

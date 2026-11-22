@@ -3,25 +3,26 @@
 import Image from "next/image";
 import { type KeyboardEvent, useState } from "react";
 
-import { ROLES, type RoleKey } from "@/lib/content";
+import { ROLE_IMAGES, ROLE_KEYS, type RoleKey } from "@/lib/content";
+import type { Dictionary } from "@/i18n/fr";
 
-export function Roles() {
+export function Roles({ dict }: { dict: Dictionary["roles"] }) {
   const [role, setRole] = useState<RoleKey>("producer");
 
   // Navigation clavier conforme ARIA tablist : flèches gauche/droite (avec rebouclage),
   // Home/Fin pour les extrémités.
   const onKeyDown = (e: KeyboardEvent, i: number) => {
     const keys: Record<string, number> = {
-      ArrowRight: (i + 1) % ROLES.length,
-      ArrowLeft: (i - 1 + ROLES.length) % ROLES.length,
+      ArrowRight: (i + 1) % ROLE_KEYS.length,
+      ArrowLeft: (i - 1 + ROLE_KEYS.length) % ROLE_KEYS.length,
       Home: 0,
-      End: ROLES.length - 1,
+      End: ROLE_KEYS.length - 1,
     };
     const next = keys[e.key];
     if (next === undefined) return;
     e.preventDefault();
-    setRole(ROLES[next].key);
-    document.getElementById(`tab-${ROLES[next].key}`)?.focus();
+    setRole(ROLE_KEYS[next]);
+    document.getElementById(`tab-${ROLE_KEYS[next]}`)?.focus();
   };
 
   return (
@@ -29,47 +30,48 @@ export function Roles() {
       <div className="container-page section-py grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-x-[72px] gap-y-12">
         <div data-reveal="0" className="flex flex-col gap-7">
           <div className="flex flex-col gap-3.5">
-            <span className="eyebrow">Une app, trois métiers</span>
-            <h2 className="heading-2">Vous êtes…</h2>
+            <span className="eyebrow">{dict.eyebrow}</span>
+            <h2 className="heading-2">{dict.heading}</h2>
           </div>
 
           <div
             role="tablist"
-            aria-label="Choisissez votre profil"
+            aria-label={dict.tablistLabel}
             className="relative flex max-w-full gap-1 self-start overflow-x-auto rounded-2xl bg-white p-[5px]"
           >
-            {ROLES.map((r, i) => {
-              const on = r.key === role;
+            {ROLE_KEYS.map((key, i) => {
+              const on = key === role;
               return (
                 <button
-                  key={r.key}
+                  key={key}
                   type="button"
                   role="tab"
-                  id={`tab-${r.key}`}
+                  id={`tab-${key}`}
                   aria-selected={on}
-                  aria-controls={`panel-${r.key}`}
+                  aria-controls={`panel-${key}`}
                   tabIndex={on ? 0 : -1}
-                  onClick={() => setRole(r.key)}
+                  onClick={() => setRole(key)}
                   onKeyDown={(e) => onKeyDown(e, i)}
                   className={`min-h-[46px] rounded-xl border-0 px-5 py-2.5 font-sans text-base font-bold whitespace-nowrap transition-colors duration-300 ease-in-out ${
                     on ? "bg-ink text-white" : "bg-transparent text-gray-700"
                   }`}
                 >
-                  {r.label}
+                  {dict.items[key].label}
                 </button>
               );
             })}
           </div>
 
           <div className="grid">
-            {ROLES.map((r) => {
-              const on = r.key === role;
+            {ROLE_KEYS.map((key) => {
+              const on = key === role;
+              const r = dict.items[key];
               return (
                 <div
-                  key={r.key}
+                  key={key}
                   role="tabpanel"
-                  id={`panel-${r.key}`}
-                  aria-labelledby={`tab-${r.key}`}
+                  id={`panel-${key}`}
+                  aria-labelledby={`tab-${key}`}
                   aria-hidden={!on}
                   inert={!on}
                   className={`col-start-1 row-start-1 flex flex-col gap-[18px] transition-[opacity,transform] duration-[450ms] ease-in-out ${
@@ -101,13 +103,13 @@ export function Roles() {
           data-reveal="1"
           className="relative aspect-[4/3] overflow-hidden rounded-[32px] bg-[#B9C6C9]"
         >
-          {ROLES.map((r) => {
-            const on = r.key === role;
+          {ROLE_KEYS.map((key) => {
+            const on = key === role;
             return (
               <Image
-                key={r.key}
-                src={r.img}
-                alt={r.label}
+                key={key}
+                src={ROLE_IMAGES[key]}
+                alt={dict.items[key].label}
                 aria-hidden={!on}
                 sizes="(min-width: 900px) 580px, 100vw"
                 className={`absolute inset-0 size-full object-cover transition-[opacity,transform] duration-[600ms,1200ms] ease-[ease,var(--ease-out-soft)] ${

@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import type { Dictionary } from "@/i18n/fr";
+
 const TARGET = 60;
 
-export function Stat() {
+export function Stat({ dict }: { dict: Dictionary["stat"] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState(TARGET);
 
@@ -50,12 +52,9 @@ export function Stat() {
         </div>
         <div data-reveal="1" className="flex flex-col gap-3.5">
           <p className="m-0 font-display text-[length:clamp(22px,2.6vw,32px)] leading-[1.22] font-bold tracking-[-0.02em] text-pretty">
-            des récoltes africaines sont perdues entre le champ et le consommateur.
+            {dict.lead}
           </p>
-          <p className="m-0 text-lg leading-[1.55] text-pretty text-gray-800">
-            Pas par manque de production, mais par manque de connexion. Farms to Market relie
-            chaque maillon pour que la récolte arrive fraîche, et payée au juste prix.
-          </p>
+          <p className="m-0 text-lg leading-[1.55] text-pretty text-gray-800">{dict.body}</p>
         </div>
       </div>
     </section>

@@ -1,13 +1,9 @@
+import type { Dictionary } from "@/i18n/fr";
 import { siteConfig } from "@/config/site";
 
 type Store = "apple" | "google";
 type App = "main" | "pro";
-
-/** Libellés sur deux lignes, repris de la référence de design (Landing Page v2). */
-const LABELS = {
-  apple: { top: "Télécharger dans", bottom: "l'App Store" },
-  google: { top: "Disponible sur", bottom: "Google Play" },
-} as const;
+type Labels = Dictionary["store"];
 
 function hrefFor(store: Store, app: App): string | null {
   const s = siteConfig.stores;
@@ -17,14 +13,22 @@ function hrefFor(store: Store, app: App): string | null {
 
 /**
  * Bouton store façon « Landing Page v2 » : rectangle arrondi (radius 14, min-height 58)
- * avec deux lignes de texte. Variante principale noire (fond clair / vert),
- * variante Pro verte (sur fond sombre).
+ * avec deux lignes de texte, libellés fournis par le dictionnaire courant.
+ * Variante principale noire, variante Pro verte (sur fond sombre).
  * Rien n'est rendu si le lien du store n'est pas configuré (cf. src/config/site.ts).
  */
-export function StoreButton({ store, app = "main" }: { store: Store; app?: App }) {
+export function StoreButton({
+  store,
+  app = "main",
+  labels,
+}: {
+  store: Store;
+  app?: App;
+  labels: Labels;
+}) {
   const href = hrefFor(store, app);
   if (!href) return null;
-  const l = LABELS[store];
+  const l = labels[store];
   const pro = app === "pro";
   return (
     <a
@@ -46,11 +50,11 @@ export function StoreButton({ store, app = "main" }: { store: Store; app?: App }
   );
 }
 
-export function StoreButtons({ app = "main" }: { app?: App }) {
+export function StoreButtons({ app = "main", labels }: { app?: App; labels: Labels }) {
   return (
     <>
-      <StoreButton store="apple" app={app} />
-      <StoreButton store="google" app={app} />
+      <StoreButton store="apple" app={app} labels={labels} />
+      <StoreButton store="google" app={app} labels={labels} />
     </>
   );
 }

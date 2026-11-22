@@ -9,7 +9,7 @@ export const siteConfig = {
 
   /** Affiche la section « App Pro » (#pro). */
   showPro: true,
-  /** Affiche la section « Avis » — chiffres et témoignages FICTIFS à remplacer. */
+  /** Affiche la section « Avis » : chiffres et témoignages FICTIFS à remplacer. */
   showProof: true,
   /** Affiche le QR code à côté des boutons stores (desktop ≥ 900px uniquement). */
   showQR: true,

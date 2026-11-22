@@ -1,14 +1,14 @@
-import { PROOF_STATS, TESTIMONIALS } from "@/lib/content";
+import type { Dictionary } from "@/i18n/fr";
 
-/** ⚠️ Section « Avis » : chiffres et témoignages FICTIFS à remplacer (cf. src/lib/content.ts). */
-export function Proof() {
+/** ⚠️ Section « Avis » : chiffres et témoignages FICTIFS à remplacer (cf. src/i18n/*). */
+export function Proof({ dict }: { dict: Dictionary["proof"] }) {
   return (
     <section className="bg-white">
       <div className="container-page section-py flex flex-col gap-12">
         <div data-reveal="0" className="flex flex-wrap items-end justify-between gap-7">
-          <h2 className="heading-2 max-w-[560px] text-balance">Ils cultivent déjà avec nous.</h2>
+          <h2 className="heading-2 max-w-[560px] text-balance">{dict.heading}</h2>
           <div className="flex flex-wrap gap-[clamp(24px,4vw,56px)]">
-            {PROOF_STATS.map((s) => (
+            {dict.stats.map((s) => (
               <div key={s.label} className="flex flex-col gap-1">
                 <span className="font-display text-[42px] font-extrabold tracking-[-0.03em]">
                   {s.value}
@@ -21,13 +21,13 @@ export function Proof() {
         </div>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-5">
-          {TESTIMONIALS.map((t, i) => (
+          {dict.testimonials.map((t, i) => (
             <figure
               key={i}
               data-reveal={String(i + 1)}
               className="m-0 flex flex-col gap-[22px] rounded-3xl bg-gray-100 p-[30px]"
             >
-              <span className="text-lg tracking-[2px] text-green-700" aria-label="5 étoiles sur 5">
+              <span className="text-lg tracking-[2px] text-green-700" aria-label={dict.starsAria}>
                 ★★★★★
               </span>
               <blockquote className="m-0 text-[19px] leading-normal text-pretty text-gray-900">

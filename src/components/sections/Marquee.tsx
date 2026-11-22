@@ -4,10 +4,11 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { MARQUEE } from "@/lib/content";
+import type { Dictionary } from "@/i18n/fr";
 
 const ITEMS = [...MARQUEE, ...MARQUEE];
 
-export function Marquee() {
+export function Marquee({ dict }: { dict: Dictionary["marquee"] }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   // Défilement infini 0 → -50 % en 60 s (liste dupliquée), ralenti ×0.2 au survol.
@@ -33,11 +34,9 @@ export function Marquee() {
     <section className="overflow-hidden bg-ink py-[clamp(40px,5vw,64px)]">
       <div className="container-page mb-7 flex flex-wrap items-baseline justify-between gap-3">
         <h2 className="m-0 font-display text-[length:clamp(20px,2.2vw,26px)] font-bold tracking-[-0.02em] text-white">
-          Une application, toute la chaîne de valeur.
+          {dict.title}
         </h2>
-        <span className="text-[15px] text-gray-500">
-          Marketplace · Paiements · Livraison · Bourse · Messagerie
-        </span>
+        <span className="text-[15px] text-gray-500">{dict.subtitle}</span>
       </div>
       {/* La marge droite est portée par chaque tuile (plutôt qu'un gap global) pour que
           translateX(-50 %) corresponde exactement à une moitié + son espacement → boucle sans saut. */}

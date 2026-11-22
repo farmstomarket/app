@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 
 import m17 from "@/assets/m-17.png";
 import mMarket from "@/assets/m-market.png";
+import type { Dictionary } from "@/i18n/fr";
 
-export function HeroVisual() {
+export function HeroVisual({ dict }: { dict: Dictionary["heroVisual"] }) {
   const parallaxRef = useRef<HTMLImageElement>(null);
 
   // Parallaxe : translateY(scrollY × 0.06), plafonné à 800px de scroll.
@@ -44,7 +45,7 @@ export function HeroVisual() {
             <Image
               ref={parallaxRef}
               src={mMarket}
-              alt="Catalogue et carte des produits dans Farms to Market"
+              alt={dict.marketAlt}
               preload
               sizes="(min-width: 900px) 840px, 150vw"
               className="absolute top-[-4%] left-[-25%] h-auto w-[150%] max-w-none"
@@ -60,7 +61,7 @@ export function HeroVisual() {
         <div data-float="5">
           <Image
             src={m17}
-            alt="Accueil de l'application"
+            alt={dict.homeAlt}
             preload
             sizes="(min-width: 900px) 440px, 78vw"
             className="h-auto w-full drop-shadow-[0_30px_40px_rgba(4,4,5,0.28)]"
@@ -76,8 +77,8 @@ export function HeroVisual() {
           ✓
         </span>
         <span className="flex flex-col">
-          <strong className="font-display text-[15px]">Paiement libéré</strong>
-          <span className="text-[13px] text-gray-600">Livraison confirmée par QR</span>
+          <strong className="font-display text-[15px]">{dict.paidTitle}</strong>
+          <span className="text-[13px] text-gray-600">{dict.paidSub}</span>
         </span>
       </div>
 
@@ -85,9 +86,9 @@ export function HeroVisual() {
         data-float="1"
         className="absolute top-[40%] right-[clamp(-8px,-2vw,-24px)] flex flex-col gap-0.5 rounded-[14px] bg-ink px-[18px] py-3 text-white shadow-[0_18px_40px_rgba(4,4,5,0.25)]"
       >
-        <span className="text-xs text-gray-400">Tomates · Bourse agricole</span>
+        <span className="text-xs text-gray-400">{dict.stockLabel}</span>
         <strong className="font-display text-base">
-          Cours en hausse <span className="text-brand">▲</span>
+          {dict.stockTrend} <span className="text-brand">▲</span>
         </strong>
       </div>
     </div>
