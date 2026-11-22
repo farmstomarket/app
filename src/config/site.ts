@@ -24,10 +24,10 @@ export const siteConfig = {
    *   `/app`, qui redirige vers le bon store selon l'OS du téléphone.
    */
   stores: {
-    appStore: null as string | null,
+    appStore: "https://apps.apple.com/app/farmstomarket-mobile/id0000000000" as string | null,
     googlePlay:
       "https://play.google.com/store/apps/details?id=com.i4u.synthi_ai.farms2market_mobile",
-    proAppStore: null as string | null,
+    proAppStore: "https://apps.apple.com/app/farmstomarket-agents/id0000000000" as string | null,
     proGooglePlay:
       "https://play.google.com/store/apps/details?id=com.i4u.synthi_ai.farms2markets_agents",
   },
